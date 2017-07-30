@@ -1,0 +1,2849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>        
+  <!-- META SECTION -->
+  <title>SWMS</title>            
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <!-- END META SECTION -->
+
+  <!-- CSS INCLUDE -->        
+  <link rel="stylesheet" type="text/css" id="theme" href="css/theme-default.css"/> 
+
+  <script type="text/javascript" src="js/plugins/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="js/plugins/jquery/jquery-ui.min.js"></script>
+  <script type="text/javascript" src="js/plugins/bootstrap/bootstrap.min.js"></script> 
+
+  <script type="text/javascript" src="js/plugins/bootstrap/bootstrap-timepicker.min.js"></script>
+
+  <script type="text/javascript" src="js/plugins/bootstrap/bootstrap-datepicker.js"></script>
+  <script type="text/javascript" src="js/d3.v3.min.js"></script>
+  <script type="text/javascript" src="js/epanet.js"></script>
+
+
+  <!-- Bootstrap header -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>   
+  <style type="text/css">
+    ::-webkit-scrollbar {
+      width: 1px;
+    }
+
+    ::-webkit-scrollbar-track {
+      -webkit-box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.3);
+      border-radius: 2px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      border-radius: 2px;
+      -webkit-box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.5);
+    }
+
+    svg {
+      background-color: #444;
+      cursor: default;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      -o-user-select: none;
+      user-select: none;
+    }
+
+    .faq .faq-item.active .faq-text{
+      max-height: 800!important;
+    }
+
+    svg:not(.active):not(.ctrl) {
+      cursor: crosshair;
+    }
+
+    path.link {
+      fill: none;
+      stroke: #000;
+      stroke-width: 4px;
+      cursor: default;
+    }
+
+    svg:not(.active):not(.ctrl) path.link {
+      cursor: pointer;
+    }
+
+    path.link.selected {
+      stroke-dasharray: 10,2;
+    }
+
+    path.link.dragline {
+      pointer-events: none;
+    }
+
+    path.link.hidden {
+      stroke-width: 0;
+    }
+
+    circle.node {
+      stroke-width: 1.5px;
+      cursor: pointer;
+    }
+
+    text {
+      font: 12px sans-serif;
+      pointer-events: none;
+    }
+
+    text.id {
+      text-anchor: middle;
+      font-weight: bold;
+    }
+
+
+
+
+
+
+    .popover-content {
+      font-size: 14px;
+    }
+
+    .well-sm {
+      height: 54px;
+      margin-bottom: 10px;
+    }
+
+    .well-analysis {
+      padding-top: 15px;
+    }
+
+    .legendcolor {
+      display: inline-block;
+      width: 30px;
+      height: 25px;
+
+      margin-right: 2%;
+      margin-bottom: -5%;
+    }
+
+    .sankeynode rect {
+      cursor: move;
+      fill-opacity: .9;
+      shape-rendering: crispEdges;
+    }
+
+    .sankeynode text {
+      pointer-events: none;
+      text-shadow: 0 1px 0 #fff;
+    }
+
+    .sankeylink {
+      fill: none;
+      stroke: white;
+      stroke-opacity: .2;
+    }
+
+    .sankeylink:hover {
+      stroke-opacity: .5;
+    }
+
+    #status {
+      margin-bottom: 24px;
+      text-align: left;
+    }
+
+    #jumbotron {
+      height: 500px;
+      padding: 0px;
+      margin-bottom: 0px;
+    }
+
+    #inputPre, #output {
+      text-align:left;
+      overflow-y: auto;
+      white-space: nowrap;
+    }
+
+    #inputTextarea {
+      width: 97%;
+      height: 20em;
+    }
+
+    #inputButtons {
+      width: 620px;    
+    }
+
+    #file {
+
+      float:left; 
+      font-size: 18px; 
+      padding-top: 4px; 
+      line-height:20px;
+      display: none;
+    }
+
+    #inputModal .modal-content {
+      width: 979px;
+    }
+
+    #saveButton {
+      display: none;
+    }
+
+    #legend {
+      /*margin-top: -496px;
+      float: right;
+      width: 250px;
+      display: none;*/
+    }
+
+    #ad {
+      text-align: center;
+      min-height: 5px;
+      margin-top: 1px;
+    }
+
+    /* RESPONSIVE CSS */
+
+    .list-group-item{
+      padding: 10px 10px!important;
+    }
+
+
+    .progress-bar_one {
+      background-color: #d7191c!important;
+    }
+
+    .progress-bar_to {
+      background-color: #fdae61!important;
+    }
+    .progress-bar_three {
+      background-color: #ffffbf!important;
+    }
+    .progress-bar_four {
+      background-color: #a6d96a!important;
+    }
+    .progress-bar_five {
+      background-color: #1a9641!important;
+    }
+
+
+  </style>
+  <!-- EOF CSS INCLUDE -->                                    
+</head>
+<body>
+  <style>.page-container .page-content{
+   margin-left:0px!important;
+ }</style>
+
+ <!-- START PAGE CONTAINER -->
+ <div class="page-container">
+
+  <!-- PAGE CONTENT -->
+  <div class="page-content">
+
+    <!-- START X-NAVIGATION VERTICAL -->
+    <ul class="x-navigation x-navigation-horizontal x-navigation-panel">
+      <!-- TOGGLE NAVIGATION -->
+      <li class="xn-icon-button">
+        <a href="#" class="x-navigation-minimize"><span class="fa fa-dedent"></span></a>
+      </li>
+
+      <!-- END TASKS -->
+    </ul>
+    <!-- END X-NAVIGATION VERTICAL -->                     
+
+    <!-- START BREADCRUMB -->
+    <ul class="breadcrumb">
+      <li><a href="#">Home</a></li>                    
+      <li class="active">Dashboard</li>
+    </ul>
+    <!-- END BREADCRUMB -->                       
+
+    <!-- PAGE CONTENT WRAPPER -->
+    <div class="page-content-wrap">
+
+
+
+      <div class="row">
+
+        <div class="col-md-12" >
+
+          <!-- START SALES BLOCK -->
+          <div class="panel panel-default" >
+            <div class="panel-heading">
+              <div class="panel-title-box">
+                <h3>Measures</h3>
+                <span>measures  tanks and juncs </span>
+              </div>                                     
+              <ul class="panel-controls panel-controls-title">                                        
+
+                <li><a href="#" class="panel-fullscreen rounded"><span class="fa fa-expand"></span></a></li>
+              </ul>                                    
+
+            </div> 
+            
+
+            <!-- START JUSTIFIED TABS -->
+            <div class="panel panel-default tabs" style="box-shadow: 0px 1px 1px 0px rgb(255, 255, 255)!important;">
+              <ul class="nav nav-tabs nav-justified">
+                <li class="active"><a href="#tab8" data-toggle="tab">NODEs</a></li>
+                <li><a href="#tab9" data-toggle="tab">LINKs</a></li> 
+              </ul>
+              <div class="panel-body tab-content">
+                <div class="tab-pane active" id="tab8">
+                  <h5 style="text-align: center">Demand</h5>
+
+                  <div class="row center-block text-center">
+                    <div class="col-lg-2">
+
+                      <li class="list-group-item"><span style="background:#d7191c" class="legendcolor"> </span><span > <a id="d_1">-666.624 to 2.520 </a> </span></li>
+                    </div>
+
+                    <div class="col-lg-2">
+
+                      <li class="list-group-item"><span style="background:#fdae61" class="legendcolor"> </span><span><a id="d_2">-666.624 to 2.520 </a> </span></li>
+
+                    </div>
+
+                    <div class="col-lg-2">
+                      <li class="list-group-item"><span style="background:#ffffbf" class="legendcolor"> </span><span> <a id="d_3">-666.624 to 2.520 </a> </span></li>
+                    </div>
+
+                    <div class="col-lg-2">
+
+                      <li class="list-group-item"><span style="background:#a6d96a" class="legendcolor"> </span><span> <a id="d_4">-666.624 to 2.520 </a> </span></li>
+                    </div>
+
+                    <div class="col-lg-2">
+                      <li class="list-group-item"><span style="background:#1a9641" class="legendcolor"> </span><span> <a id="d_5">-666.624 to 2.520 </a> </span></li>
+                    </div>
+
+                  </div>
+                  <h5 style="text-align: center ;    margin-top: 2%;">Pressure</h5>
+
+                  <div class="row center-block text-center">
+                    <div class="col-lg-2">
+
+                      <li class="list-group-item"><span style="background:#d7191c" class="legendcolor"> </span><span > <a id="p_1">-666.624 to 2.520 </a> </span></li>
+                    </div>
+
+                    <div class="col-lg-2">
+
+                      <li class="list-group-item"><span style="background:#fdae61" class="legendcolor"> </span><span><a id="p_2">-666.624 to 2.520 </a> </span></li>
+
+                    </div>
+
+                    <div class="col-lg-2">
+                      <li class="list-group-item"><span style="background:#ffffbf" class="legendcolor"> </span><span> <a id="p_3">-666.624 to 2.520 </a> </span></li>
+                    </div>
+
+                    <div class="col-lg-2">
+
+                      <li class="list-group-item"><span style="background:#a6d96a" class="legendcolor"> </span><span> <a id="p_4">-666.624 to 2.520 </a> </span></li>
+                    </div>
+
+                    <div class="col-lg-2">
+                      <li class="list-group-item"><span style="background:#1a9641" class="legendcolor"> </span><span> <a id="p_5">-666.624 to 2.520 </a> </span></li>
+                    </div>
+
+                  </div>
+
+
+
+                </div>
+                <div class="tab-pane" id="tab9">
+                  <h5 style="text-align: center ;    margin-top: 2%;">Flow</h5>
+
+                  <div class="row center-block text-center">
+                    <div class="col-lg-2">
+
+                      <li class="list-group-item"><span style="background:#ca0020" class="legendcolor"> </span><span > <a id="f_1">-666.624 to 2.520 </a> </span></li>
+                    </div>
+
+                    <div class="col-lg-2">
+
+                      <li class="list-group-item"><span style="background:#f4a582" class="legendcolor"> </span><span><a id="f_2">-666.624 to 2.520 </a> </span></li>
+
+                    </div>
+
+                    <div class="col-lg-2">
+                      <li class="list-group-item"><span style="background:#929292" class="legendcolor"> </span><span> <a id="f_3">-666.624 to 2.520 </a> </span></li>
+                    </div>
+
+                    <div class="col-lg-2">
+
+                      <li class="list-group-item"><span style="background:#92c5de" class="legendcolor"> </span><span> <a id="f_4">-666.624 to 2.520 </a> </span></li>
+                    </div>
+
+                    <div class="col-lg-2">
+                      <li class="list-group-item"><span style="background:#0571b0" class="legendcolor"> </span><span> <a id="f_5">-666.624 to 2.520 </a> </span></li>
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>  
+          </div>    
+        </div>  
+      </div>                       
+
+      <div class="row">
+          
+          <div class="col-lg-12">
+            <div class="panel panel-default">
+            <div class="panel-heading">
+              <div class="panel-title-box">
+                <h3>Networks</h3>
+                <span></span>
+              </div>                                     
+              <ul class="panel-controls panel-controls-title">                                        
+
+                <li><a href="#" class="panel-fullscreen rounded"><span class="fa fa-expand"></span></a></li>
+              </ul>                                    
+
+            </div>
+            <div class="panel-body">  
+              <div class="col-lg-12">
+                <div class="row">
+                  <div class="col-lg-2">
+
+                    <a href="javascript:epanetjs.loadSample('Net1.inp')"><button type="button" class="btn btn-info btn-rounded">Network 1</button></a>
+
+                  </div> 
+                  <div class="col-lg-2">
+
+                    <a><button type="button" class="btn btn-info btn-rounded">Network 2</button></a>
+                   </div>
+
+                   <div class="col-lg-2">
+
+                    <a><button type="button" class="btn btn-info btn-rounded">Network 3</button></a>
+                   </div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+
+      </div>
+
+         </div>
+      <div class="row">
+
+        <div class="col-md-6" >
+
+          <!-- START SALES BLOCK -->
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <div class="panel-title-box">
+                <h3>Options</h3>
+                <span></span>
+              </div>                                     
+              <ul class="panel-controls panel-controls-title">                                        
+
+                <li><a href="#" class="panel-fullscreen rounded"><span class="fa fa-expand"></span></a></li>
+              </ul>                                    
+
+            </div>
+            <!--<div class="panel-body">  
+              <div class="col-lg-12">
+                <div class="row">
+                  <div class="col-lg-12">
+
+                    
+                  </div>
+                  <hr>
+                  <div class="col-lg-12">
+
+                   
+                  </div>
+                </div>
+
+              </div>
+            </div>!-->
+
+
+            <div class="panel-body faq" style="   ">
+
+              <div class="faq-item">
+                <div class="faq-title"><span class="fa fa-angle-down"></span>Tanks Chart </div>
+                <div class="faq-text">
+                  <div class="row" style="    margin-bottom: 2%;">
+                    <div class="col-lg-6">
+                      <div class="row">
+                        <h5 style="text-align: center">From</h5>
+                        <div class="col-lg-6">
+
+                         <div class="input-group">
+                           <input type="text" id="tank_from_date"  class="form-control datepicker" value="06-06-2014" data-date="06-06-2014" data-date-format="dd-mm-yyyy" data-date-viewmode="years"/>
+                           <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                         </div>
+
+                       </div>
+
+                       <div class="col-lg-6">
+                        <div class="form-group">  
+                          <div class="input-group bootstrap-timepicker">
+                            <input  id="tank_from_time"  type="text" class="form-control timepicker24"/>
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+
+
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="row">
+                      <h5 style="text-align: center">To</h5>
+                      <div class="col-lg-6">
+
+                       <div class="input-group">
+                        <input  id="tank_to_date"  type="text" class="form-control datepicker" value="06-06-2014" data-date="06-06-2014" data-date-format="dd-mm-yyyy" data-date-viewmode="years"/>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                      </div>
+
+                    </div>
+
+                    <div class="col-lg-6">
+                      <div class="form-group">  
+                        <div class="input-group bootstrap-timepicker">
+                          <input  id="tank_to_time"  type="text" class="form-control timepicker24"/>
+                          <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+              <div id="tanks" style="height: 350px; width: 100%;"></div>
+            </div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-title"><span class="fa fa-angle-down"></span>Junc Chart</div>
+            <div class="faq-text">
+              <div class="row" style="    margin-bottom: 2%;">
+                <div class="col-lg-6">
+                  <div class="row">
+                    <h5 style="text-align: center">From</h5>
+                    <div class="col-lg-6">
+
+                     <div class="input-group">
+                      <input type="text"  id="junc_from_date"   class="form-control datepicker" value="06-06-2014" data-date="06-06-2014" data-date-format="dd-mm-yyyy" data-date-viewmode="years"/>
+                      <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                    </div>
+
+                  </div>
+
+                  <div class="col-lg-6">
+                    <div class="form-group">  
+                      <div class="input-group bootstrap-timepicker">
+                        <input type="text"  id="junc_from_time"   class="form-control timepicker24"/>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+
+
+              </div>
+              <div class="col-lg-6">
+                <div class="row">
+                  <h5 style="text-align: center">To</h5>
+                  <div class="col-lg-6">
+
+                   <div class="input-group">
+                    <input type="text"  id="junc_to_date"  class="form-control datepicker" value="06-06-2014" data-date="06-06-2014" data-date-format="dd-mm-yyyy" data-date-viewmode="years"/>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                  </div>
+
+                </div>
+
+                <div class="col-lg-6">
+                  <div class="form-group">  
+                    <div class="input-group bootstrap-timepicker">
+                      <input type="text"  id="junc_to_time"  class="form-control timepicker24"/>
+                      <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+
+
+
+          <div class="col-md-12">
+            <!-- START TABS -->                                
+            <div class="panel panel-default tabs">                            
+              <ul class="nav nav-tabs" role="tablist">
+                <li class="active"><a href="#tab-first" role="tab" data-toggle="tab">Pressure</a></li>
+                <li><a href="#tab-second" role="tab" data-toggle="tab">Demand</a></li> 
+              </ul>                            
+              <div class="panel-body tab-content">
+                <div class="tab-pane active" id="tab-first">
+
+                  <div id="junc_p" style="height: 400px; width: 100%;"></div>
+                </div>
+                <div class="tab-pane" id="tab-second">
+
+                  <div id="junc_d" style="height: 400px; width: 100%;"></div>
+                </div>
+
+
+              </div>
+            </div>                                                   
+            <!-- END TABS -->                        
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+
+
+
+      <div class="faq-item">
+        <div class="faq-title"><span class="fa fa-angle-down"></span>Simulation</div>
+        <div class="faq-text" style="    padding: 0px 0px;">
+
+
+          <div class="row">
+            <div class="col-lg-12  text-center center-block"><button class="btn btn-primary"  onclick="start_simulate()">START</button> </div> 
+            <div class="col-lg-12" id="juncs">
+             <!-- START PROJECTS BLOCK -->
+             <div class="panel panel-default">
+              <div class="panel-heading">
+                <div class="panel-title-box">
+                  <h3>Juncs</h3>
+                  <span>Simulate All Juncs</span>
+                </div>                                    
+                <ul class="panel-controls" style="margin-top: 2px;">
+                  <li><a href="#" class="panel-fullscreen"><span class="fa fa-expand"></span></a></li>                                       
+                </ul>
+              </div>
+              <div class="panel-body panel-body-table" style="    overflow: scroll;
+              height: 350px;">
+
+              <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                      <th width="10%">Junc ID</th>
+                      <th width="10%">Pressure</th>
+                      <th width="35%">Status</th>
+                      <th width="10%">Demand</th>
+                      <th width="35%">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="junc_sm">
+                    <!--   <tr>
+                        <td><strong>Atlant</strong></td>
+                        <td><span class="label label-danger">Developing</span></td>
+                        <td>
+                          <div class="progress progress-small progress-striped active">
+                            <div style="width: 10px; height: 10px; background-color: red;"></div>
+                            <div class="progress-bar progress-bar_four" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 25%;">85%</div>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="progress progress-small progress-striped active">
+                            <div style="width: 100%; height: 10px; background-color: red;"></div>
+                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 85%;">85%</div>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="progress progress-small progress-striped active">
+                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 85%;">85%</div>
+                          </div>
+                        </td>
+                      </tr>
+                    -->
+
+                  </tbody>
+                </table>
+              </div>
+
+            </div>
+          </div>
+          <!-- END PROJECTS BLOCK -->
+
+
+        </div>
+
+
+
+
+
+
+        <div class="col-lg-7" id="juncs">
+         <!-- START PROJECTS BLOCK -->
+         <div class="panel panel-default">
+          <div class="panel-heading">
+            <div class="panel-title-box">
+              <h3>Pipes</h3>
+              <span>Simulate All Pipes</span>
+            </div>                                    
+            <ul class="panel-controls" style="margin-top: 2px;">
+              <li><a href="#" class="panel-fullscreen"><span class="fa fa-expand"></span></a></li>                                       
+            </ul>
+          </div>
+          <div class="panel-body panel-body-table" style="    overflow: scroll;
+          height: 350px;">
+
+          <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th width="10%">PipeID</th>
+                  <th width="10%">Flow</th>
+                  <th width="35%">Direction</th> 
+                  <th width="35%">Status</th> 
+                </tr>
+              </thead>
+              <tbody id="pipes_sm">
+                    <!--   <tr>
+                        <td><strong>Atlant</strong></td>
+                        <td><span class="label label-danger">Developing</span></td>
+                        <td>
+                          <div class="progress progress-small progress-striped active">
+                            <div style="width: 10px; height: 10px; background-color: red;"></div>
+                            <div class="progress-bar progress-bar_four" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 25%;">85%</div>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="progress progress-small progress-striped active">
+                            <div style="width: 100%; height: 10px; background-color: red;"></div>
+                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 85%;">85%</div>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="progress progress-small progress-striped active">
+                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 85%;">85%</div>
+                          </div>
+                        </td>
+                      </tr>
+                    -->
+
+                  </tbody>
+                </table>
+              </div>
+
+            </div>
+          </div>
+          <!-- END PROJECTS BLOCK -->
+
+
+        </div>
+
+
+
+
+        <div class="col-lg-5" id="juncs">
+         <!-- START PROJECTS BLOCK -->
+         <div class="panel panel-default">
+          <div class="panel-heading">
+            <div class="panel-title-box">
+              <h3>Tanks</h3>
+              <span>Simulate All Tanks</span>
+            </div>                                    
+            <ul class="panel-controls" style="margin-top: 2px;">
+              <li><a href="#" class="panel-fullscreen"><span class="fa fa-expand"></span></a></li>                                       
+            </ul>
+          </div>
+          <div class="panel-body panel-body-table" style="    overflow: scroll;
+          height: 350px;">
+
+          <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th width="10%">TankID</th>
+                  <th width="30%">Flow</th> 
+                  <th width="60%">sttus</th> 
+                </tr>
+              </thead>
+              <tbody id="tank_sm">
+                    <!--   <tr>
+                        <td><strong>Atlant</strong></td>
+                        <td><span class="label label-danger">Developing</span></td>
+                        <td>
+                          <div class="progress progress-small progress-striped active">
+                            <div style="width: 10px; height: 10px; background-color: red;"></div>
+                            <div class="progress-bar progress-bar_four" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 25%;">85%</div>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="progress progress-small progress-striped active">
+                            <div style="width: 100%; height: 10px; background-color: red;"></div>
+                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 85%;">85%</div>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="progress progress-small progress-striped active">
+                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 85%;">85%</div>
+                          </div>
+                        </td>
+                      </tr>
+                    -->
+
+                  </tbody>
+                </table>
+              </div>
+
+            </div>
+          </div>
+          <!-- END PROJECTS BLOCK -->
+
+
+        </div>
+
+
+      </div>
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+</div>
+</div>
+
+<!--<div class="col-lg-2">
+   <div id="legend">
+          </div>
+
+</div>
+
+!-->
+
+
+
+<div class="col-md-6">
+
+  <!-- START SALES BLOCK -->
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title-box">
+        <h3>Netowrk</h3>
+        <span></span>
+      </div>                                     
+      <ul class="panel-controls panel-controls-title">                                        
+
+        <li><a href="#" class="panel-fullscreen rounded"><span class="fa fa-expand"></span></a></li>
+      </ul>                                    
+
+    </div>
+    <div class="panel-body">                                    
+      <div class="row stacked">
+
+        <div class="col-md-12">
+          <div id="inputModal" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  <h3 id="myModalLabel">Edit EPANET Model</h3>
+                </div>
+                <div class="modal-body">
+                  <textarea id="inputTextarea">
+                    [TITLE]
+                    EPANET Example Network 2
+                    Example of modeling a 55-hour fluoride tracer study.
+                    Measured fluoride data is contained in the file Net2-FL.dat
+                    and should be registered with the project to produce a
+                    Calibration Report (select Calibration Data from the Project
+                    menu).
+
+                    [JUNCTIONS]
+                    ;ID               Elev          Demand        Pattern         
+                    1                50            -694.4        2                 ;
+                    2                100           8                               ;
+                    3                60            14                              ;
+                    4                60            8                               ;
+                    5                100           8                               ;
+                    6                125           5                               ;
+                    7                160           4                               ;
+                    8                110           9                               ;
+                    9                180           14                              ;
+                    10               130           5                               ;
+                    11               185           34.78                           ;
+                    12               210           16                              ;
+                    13               210           2                               ;
+                    14               200           2                               ;
+                    15               190           2                               ;
+                    16               150           20                              ;
+                    17               180           20                              ;
+                    18               100           20                              ;
+                    19               150           5                               ;
+                    20               170           19                              ;
+                    21               150           16                              ;
+                    22               200           10                              ;
+                    23               230           8                               ;
+                    24               190           11                              ;
+                    25               230           6                               ;
+                    27               130           8                               ;
+                    28               110           0                               ;
+                    29               110           7                               ;
+                    30               130           3                               ;
+                    31               190           17                              ;
+                    32               110           17                              ;
+                    33               180           1.5                             ;
+                    34               190           1.5                             ;
+                    35               110           0                               ;
+                    36               110           1                               ;
+
+                    [RESERVOIRS]
+                    ;ID               Head          Pattern         
+
+                    [TANKS]
+                    ;ID               Elevation     InitLevel     MinLevel      MaxLevel      Diameter      MinVol        VolCurve
+                    26               235           56.7          50            70            50            0                               ;
+
+                    [PIPES]
+                    ;ID               Node1             Node2             Length        Diameter      Roughness     MinorLoss     Status
+                    1                1                 2                 2400          12            100           0             Open    ;
+                    2                2                 5                 800           12            100           0             Open    ;
+                    3                2                 3                 1300          8             100           0             Open    ;
+                    4                3                 4                 1200          8             100           0             Open    ;
+                    5                4                 5                 1000          12            100           0             Open    ;
+                    6                5                 6                 1200          12            100           0             Open    ;
+                    7                6                 7                 2700          12            100           0             Open    ;
+                    8                7                 8                 1200          12            140           0             Open    ;
+                    9                7                 9                 400           12            100           0             Open    ;
+                    10               8                 10                1000          8             140           0             Open    ;
+                    11               9                 11                700           12            100           0             Open    ;
+                    12               11                12                1900          12            100           0             Open    ;
+                    13               12                13                600           12            100           0             Open    ;
+                    14               13                14                400           12            100           0             Open    ;
+                    15               14                15                300           12            100           0             Open    ;
+                    16               13                16                1500          8             100           0             Open    ;
+                    17               15                17                1500          8             100           0             Open    ;
+                    18               16                17                600           8             100           0             Open    ;
+                    19               17                18                700           12            100           0             Open    ;
+                    20               18                32                350           12            100           0             Open    ;
+                    21               16                19                1400          8             100           0             Open    ;
+                    22               14                20                1100          12            100           0             Open    ;
+                    23               20                21                1300          8             100           0             Open    ;
+                    24               21                22                1300          8             100           0             Open    ;
+                    25               20                22                1300          8             100           0             Open    ;
+                    26               24                23                600           12            100           0             Open    ;
+                    27               15                24                250           12            100           0             Open    ;
+                    28               23                25                300           12            100           0             Open    ;
+                    29               25                26                200           12            100           0             Open    ;
+                    30               25                31                600           12            100           0             Open    ;
+                    31               31                27                400           8             100           0             Open    ;
+                    32               27                29                400           8             100           0             Open    ;
+                    34               29                28                700           8             100           0             Open    ;
+                    35               22                33                1000          8             100           0             Open    ;
+                    36               33                34                400           8             100           0             Open    ;
+                    37               32                19                500           8             100           0             Open    ;
+                    38               29                35                500           8             100           0             Open    ;
+                    39               35                30                1000          8             100           0             Open    ;
+                    40               28                35                700           8             100           0             Open    ;
+                    41               28                36                300           8             100           0             Open    ;
+
+                    [PUMPS]
+                    ;ID               Node1             Node2             Parameters
+
+                    [VALVES]
+                    ;ID               Node1             Node2             Diameter      Type  Setting       MinorLoss   
+
+                    [TAGS]
+
+                    [DEMANDS]
+                    ;Junction         Demand        Pattern           Category
+
+                    [STATUS]
+                    ;ID               Status/Setting
+
+                    [PATTERNS]
+                    ;ID               Multipliers
+                    ;Demand Pattern
+                    1                1.26          1.04          .97           .97           .89           1.19        
+                    1                1.28          .67           .67           1.34          2.46          .97         
+                    1                .92           .68           1.43          .61           .31           .78         
+                    1                .37           .67           1.26          1.56          1.19          1.26        
+                    1                .6            1.1           1.03          .73           .88           1.06        
+                    1                .99           1.72          1.12          1.34          1.12          .97         
+                    1                1.04          1.15          .91           .61           .68           .46         
+                    1                .51           .74           1.12          1.34          1.26          .97         
+                    1                .82           1.37          1.03          .81           .88           .81         
+                    1                .81         
+                    ;Pump Station Outflow Pattern
+                    2                .96           .96           .96           .96           .96           .96         
+                    2                .62           0             0             0             0             0           
+                    2                .8            1             1             1             1             .15         
+                    2                0             0             0             0             0             0           
+                    2                .55           .92           .92           .92           .92           .9          
+                    2                .9            .45           0             0             0             0           
+                    2                0             .7            1             1             1             1           
+                    2                .2            0             0             0             0             0           
+                    2                0             .74           .92           .92           .92           .92         
+                    2                .92         
+                    ;Pump Station Fluoride Pattern 
+                    3                .98           1.02          1.05          .99           .64           .46         
+                    3                .35           .35           .35           .35           .35           .35         
+                    3                .17           .17           .13           .13           .13           .15         
+                    3                .15           .15           .15           .15           .15           .15         
+                    3                .15           .12           .1            .08           .11           .09         
+                    3                .09           .08           .08           .08           .08           .08         
+                    3                .08           .09           .07           .07           .09           .09         
+                    3                .09           .09           .09           .09           .09           .09         
+                    3                .09           .08           .35           .72           .82           .92         
+                    3                1           
+
+                    [CURVES]
+                    ;ID               X-Value       Y-Value
+
+                    [CONTROLS]
+
+                    [RULES]
+
+                    [ENERGY]
+                    Global Efficiency    75
+                    Global Price         0.0
+                    Demand Charge        0.0
+
+                    [EMITTERS]
+                    ;Junction         Coefficient
+
+                    [QUALITY]
+                    ;Node             InitQual
+                    1                1.0
+                    2                1.0
+                    3                1.0
+                    4                1.0
+                    5                1.0
+                    6                1.0
+                    7                1.0
+                    8                1.0
+                    9                1.0
+                    10               1.0
+                    11               1.0
+                    12               1.0
+                    13               1.0
+                    14               1.0
+                    15               1.0
+                    16               1.0
+                    17               1.0
+                    18               1.0
+                    19               1.0
+                    20               1.0
+                    21               1.0
+                    22               1.0
+                    23               1.0
+                    24               1.0
+                    25               1.0
+                    27               1.0
+                    28               1.0
+                    29               1.0
+                    30               1.0
+                    31               1.0
+                    32               1.0
+                    33               1.0
+                    34               1.0
+                    35               1.0
+                    36               1.0
+                    26               1.0
+
+                    [SOURCES]
+                    ;Node             Type          Quality       Pattern
+                    1                CONCEN        1.0           3
+
+                    [REACTIONS]
+                    ;Type       Pipe/Tank         Coefficient
+
+
+                    [REACTIONS]
+                    Order Bulk             1
+                    Order Tank             1
+                    Order Wall             1
+                    Global Bulk            0.0
+                    Global Wall            0.0
+                    Limiting Potential     0.0
+                    Roughness Correlation  0.0
+
+                    [MIXING]
+                    ;Tank             Model
+
+                    [TIMES]
+                    Duration             55:00 
+                    Hydraulic Timestep   1:00 
+                    Quality Timestep     0:05 
+                    Pattern Timestep     1:00 
+                    Pattern Start        0:00 
+                    Report Timestep      1:00 
+                    Report Start         0:00 
+                    Start ClockTime      8 am
+                    Statistic            None
+
+                    [REPORT]
+                    Status               No
+                    Summary              No
+                    Page                 0
+
+                    [OPTIONS]
+                    Units                GPM
+                    Headloss             H-W
+                    Specific Gravity     1.0
+                    Viscosity            1.0
+                    Trials               40
+                    Accuracy             0.001
+                    CHECKFREQ            2
+                    MAXCHECK             10
+                    DAMPLIMIT            0
+                    Unbalanced           Continue 10
+                    Pattern              1
+                    Demand Multiplier    1.0
+                    Emitter Exponent     0.5
+                    Quality              Fluoride mg/L
+                    Diffusivity          1.0
+                    Tolerance            0.01
+
+                    [COORDINATES]
+                    ;Node             X-Coord           Y-Coord
+                    1                21.00             4.00            
+                    2                19.00             20.00           
+                    3                11.00             21.00           
+                    4                14.00             28.00           
+                    5                19.00             25.00           
+                    6                28.00             23.00           
+                    7                36.00             39.00           
+                    8                38.00             30.00           
+                    9                36.00             42.00           
+                    10               37.00             23.00           
+                    11               37.00             49.00           
+                    12               39.00             60.00           
+                    13               38.00             64.00           
+                    14               38.00             66.00           
+                    15               37.00             69.00           
+                    16               27.00             65.00           
+                    17               27.00             69.00           
+                    18               23.00             68.00           
+                    19               21.00             59.00           
+                    20               45.00             68.00           
+                    21               51.00             62.00           
+                    22               54.00             69.00           
+                    23               35.00             74.00           
+                    24               37.00             71.00           
+                    25               35.00             76.00           
+                    27               39.00             87.00           
+                    28               49.00             85.00           
+                    29               42.00             86.00           
+                    30               47.00             80.00           
+                    31               37.00             80.00           
+                    32               23.00             64.00           
+                    33               56.00             73.00           
+                    34               56.00             77.00           
+                    35               43.00             81.00           
+                    36               53.00             87.00           
+                    26               33.00             76.00           
+
+                    [VERTICES]
+                    ;Link             X-Coord           Y-Coord
+
+                    [LABELS]
+                    ;X-Coord           Y-Coord          Label & Anchor Node
+                    24.00            7.00             "Pump"                 
+                    24.00            4.00             "Station"                 
+                    26.76            77.42            "Tank"                 
+
+                    [BACKDROP]
+                    DIMENSIONS       8.75              -0.15             58.25             91.15           
+                    UNITS            None
+                    FILE             
+                    OFFSET           0.00              0.00            
+
+                    [END]
+
+
+
+                  </textarea>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                  <button class="btn btn-primary" onclick="runButton()">Save changes</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- NAVBAR -->
+
+
+
+
+
+          <div class="row">
+            <div class="col-lg-12" style="    height: 593px;">
+              <div id="jumbotron" class="jumbotron" >
+                <svg id="svgSimple" width="100%" style="height: 600px!important"></svg>
+              </div>
+
+            </div>
+
+
+
+          </div>
+
+          <div class=" marketing">
+            <div id="ad">
+
+            </div>
+            <div class="row" style="    display: none;">
+              <div class="col-lg-6" id="inputContainer" style="    padding: 1%;">
+
+                <h2 class="">Input
+                  <button type="button" class="btn btn-default" data-content="Select File-&gt;Export-&gt;Network... in EPANET to save INP files. If opening does not work, open in text editor, then copy and paste." title="" data-toggle="popover" data-original-title="INP file input">
+                    <span class="glyphicon glyphicon-info-sign"></span>
+                  </button>
+                </h2>
+
+                <div class="well well-sm" id="inputButtons">
+                  <input type="file" id="file" style="display: none" data-toggle="tooltip" title="File is kept locally in your browser. It is not sent to the server."/> 
+                  <button id="saveButton" class="btn" type="button" role="button" onclick="saveButton()" data-toggle="tooltip" title="Save model in INP format.">Save</button>              
+                  <button href="#inputModal" type="button" role="button" class="btn" data-toggle="modal">Edit</button>
+                </div>
+                <pre id="inputPre" data-toggle="tooltip" title="Click to edit">
+                </pre>          
+              </div><!-- /.col-lg-8 -->
+              <div class="col-lg-6" id="analysisContainer" style="padding: 1%;">
+                <h2>Analysis</h2> 
+                <div class="well well-sm well-analysis">
+                  <span id="status">
+                    <span class="label label-success">Success</span>
+                  </span>    
+                  Time
+                  <select id="time" onchange="epanetjs.renderAnalysis()">
+                    <option>1</option>
+                  </select>
+                  &nbsp;Node
+                  <select id="nodeResult" onchange="epanetjs.renderAnalysis()">
+                    <option>Demand</option>
+                    <option>Head</option>
+                    <option>Pressure</option>
+                  </select>
+                  &nbsp;Link
+                  <select id="linkResult" onchange="epanetjs.renderAnalysis()">
+                    <option>Flow</option>
+                    <option>Velocity</option>
+                    <option>Headloss</option>
+                  </select>
+                </div>         
+                <pre id="output"></pre>
+              </div><!-- /.col-lg-8 -->        
+            </div><!-- /.row -->
+
+
+            <!-- FOOTER -->
+
+
+          </div><!-- /.container -->
+
+          <!-- About modal -->
+          <div id="about" class="modal fade">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                  <h4 class="modal-title">epanet.js 2.0.12.4</h4>
+                </div>
+                <div class="modal-body">
+                  <p>Copyright &copy; 2013 Steffen Macke and others.</p>
+                  <p>Analyse EPANET INP files in your browser. The INP files
+                    are kept locally in the browser and not send to a server.</p>
+                    <p>Uses the original EPANET 2 source code.</p>
+                    <p>This product includes color specifications and designs 
+                     developed by Cynthia Brewer (http://colorbrewer.org/).</p>
+                     <p>Epanet.de is not affiliated with or managed by the United 
+                       States Environmental Protection Agency or any other 
+                       governmental agency.</p>
+                       <p>Additional information is available on 
+                         <a href="http://epanet.de/developer/epanetjs.html">epanet.de/developer/epanetjs.html</a>.</p>
+                       </div>
+                       <div class="modal-footer">
+                        <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">OK</button>                    
+                      </div>
+                    </div><!-- /.modal-content -->
+                  </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+
+                <!-- progress modal -->
+                <div id="working" class="modal fade">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title"><span class="glyphicon glyphicon-cog"></span> EPANET analysis in progress</h4>
+                      </div>
+                      <div class="modal-body">
+                        <p><span class="glyphicon glyphicon-time"></span> Please wait...</p>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">OK</button>                    
+                      </div>
+                    </div><!-- /.modal-content -->
+                  </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+
+
+              </div>
+              <progress value="0" max="100" id="progress" hidden=1></progress>
+            </div>                                    
+          </div>
+        </div>
+        <!-- END SALES BLOCK -->
+
+      </div>
+
+
+      <div class="col-md-6">
+
+        <!-- START SALES BLOCK -->
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <div class="panel-title-box">
+              <h3>Leak</h3>
+              <span></span>
+            </div>                                     
+            <ul class="panel-controls panel-controls-title">                                        
+
+              <li><a href="#" class="panel-fullscreen rounded"><span class="fa fa-expand"></span></a></li>
+            </ul>                                    
+
+          </div>
+          <div class="panel-body">                     
+
+            <div class="col-md-12">
+
+              <!-- START PROJECTS BLOCK -->
+              <div class="panel panel-default" style="    height: 306px;
+    overflow: scroll;">
+                <div class="panel-heading ui-draggable-handle">
+                  <div class="panel-title-box">
+                    <h3>LEAKS</h3>
+                    <span>Leaks Details</span>
+                  </div>                                    
+                  <ul class="panel-controls" style="margin-top: 2px;">
+                    <li><a href="#" class="panel-fullscreen"><span class="fa fa-expand"></span></a></li>
+
+                  </ul>
+                </div>
+                <div class="panel-body panel-body-table">
+
+                  <div class="table-responsive">
+                    <table class="table table-bordered table-striped">
+                      <thead>
+                        <tr>
+                          <th width="15%">Pipe ID</th>
+                          <th width="30%">Details</th>
+                          <th width="20%">Distance</th>
+
+                          <th width="20%">Time</th>
+
+                          <th width="15%">Event</th>
+                        </tr>
+                      </thead>
+                      <tbody id="pipes_leak_sm">
+
+
+                      </tbody>
+                    </table>
+                  </div>
+
+                </div>
+              </div>
+              <!-- END PROJECTS BLOCK -->
+
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+    </div>
+    <!-- END DASHBOARD CHART -->
+
+
+    <div class="row">
+      <div class="col-md-12">
+
+        <!-- START SALES BLOCK -->
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <div class="panel-title-box">
+              <h3>Sales</h3>
+              <span>Sales activity by period you selected</span>
+            </div>                                     
+            <ul class="panel-controls panel-controls-title">                                        
+
+              <li><a href="#" class="panel-fullscreen rounded"><span class="fa fa-expand"></span></a></li>
+            </ul>                                    
+
+          </div>
+          <div class="panel-body">  
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+  </div>
+  <!-- END PAGE CONTENT WRAPPER -->                                
+</div>            
+<!-- END PAGE CONTENT -->
+</div>
+<!-- END PAGE CONTAINER -->
+
+
+<!-- END PRELOADS -->                  
+
+
+<script type='text/javascript' src='js/plugins/icheck/icheck.min.js'></script>        
+<script type="text/javascript" src="js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js"></script>
+<script type="text/javascript" src="js/plugins/scrolltotop/scrolltopcontrol.js"></script>
+
+<script type='text/javascript' src='js/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js'></script>
+<script type='text/javascript' src='js/plugins/jvectormap/jquery-jvectormap-world-mill-en.js'></script>                 
+<script type="text/javascript" src="js/plugins/owl/owl.carousel.min.js"></script>                 
+
+<script type="text/javascript" src="js/plugins/moment.min.js"></script>
+<script type="text/javascript" src="js/plugins/daterangepicker/daterangepicker.js"></script>
+
+
+
+<script type="text/javascript" src="js/plugins/highlight/jquery.highlight-4.js"></script>
+
+<!-- END THIS PAGE PLUGINS -->       
+
+<!-- START TEMPLATE --> 
+
+<script type="text/javascript" src="js/plugins.js"></script>        
+<script type="text/javascript" src="js/actions.js"></script> 
+<script type="text/javascript" src="js/faq.js"></script>
+
+
+
+<!-- END TEMPLATE -->
+<script type="text/javascript" src="js/demo_dashboard.js"></script>
+
+<script src="js/FileSaver.min.js"></script> 
+
+<script src="js/highstock.js"></script>
+<script src="js/exporting.js"></script> 
+
+<script src="js/ajax.js"></script>
+<!-- <script src="js/data.js"></script> -->
+
+<script>
+
+
+           //     $(".timepicker24").timepicker({minuteStep: 5,showSeconds: true,showMeridian: false});
+           !function ($) {
+            $(function() {
+              try {
+                var reader = new FileReader();
+                if(reader)
+                  $("input[type=file").show();
+              } catch (e) {}
+              try {
+                var blob = new Blob();
+                if(blob)
+                  $("#saveButton").show();
+              } catch (e) {}
+              $("[data-toggle=popover]").popover();
+            })
+          }(window.jQuery)
+
+          if(window.File && window.FileReader && window.FileList)
+            document.getElementById('file').style.display = 'block';
+          function handleFileSelect(evt) {
+            if(!evt.target || !evt.target.files || !evt.target.files.length || 0 == evt.target.files.length)
+             return;
+
+           var f = evt.target.files[0],
+           reader = new FileReader();
+           reader.onload = (function(theFile) {
+            return function(e) {
+              document.getElementById('inputTextarea').value = e.target.result;
+              runButton();
+            };
+          })(f);
+
+          reader.readAsText(f);
+        }
+        document.getElementById('file').addEventListener('change', handleFileSelect, false);
+        $('#inputPre').on('click', function () {$('#inputModal').modal('show');});
+
+       // connect to canvas
+       var Module = {
+        preRun: [],
+        postRun: [],
+        print: (function() {
+          var element = document.getElementById('output');
+          element.value = ''; // clear browser cache
+          return function(text) {
+            text = Array.prototype.slice.call(arguments).join(' ');
+            // These replacements are necessary if you render to raw HTML
+            //text = text.replace(/&/g, "&amp;");
+            //text = text.replace(/</g, "&lt;");
+            //text = text.replace(/>/g, "&gt;");
+            //text = text.replace('\n', '<br>', 'g');
+            element.value += text + "\n";
+            element.scrollTop = element.scrollHeight; // focus on bottom
+          };
+        })(),
+        printErr: function(text) {
+          text = Array.prototype.slice.call(arguments).join(' ');
+          if (0) { // XXX disabled for safety typeof dump == 'function') {
+            dump(text + '\n'); // fast, straight to the real console
+          } else {
+            console.log("");
+          }
+        },
+        canvas: document.getElementById('canvas'),
+        setStatus: function(text) {
+          if (!Module.setStatus.last) Module.setStatus.last = { time: Date.now(), text: '' };
+          if (text === Module.setStatus.text) return;
+          var m = text.match(/([^(]+)\((\d+(\.\d+)?)\/(\d+)\)/);
+          var now = Date.now();
+          if (m && now - Date.now() < 30) return; // if this is a progress update, skip it if too soon
+          var statusElement = document.getElementById('status');
+          var progressElement = document.getElementById('progress');
+          if (m) {
+            text = m[1];
+            progressElement.value = parseInt(m[2])*100;
+            progressElement.max = parseInt(m[4])*100;
+            progressElement.hidden = false;
+          } else {
+            progressElement.value = null;
+            progressElement.max = null;
+            progressElement.hidden = true;
+          }
+          statusElement.innerHTML = text;
+        },
+        totalDependencies: 0,
+        monitorRunDependencies: function(left) {
+          this.totalDependencies = Math.max(this.totalDependencies, left);
+          Module.setStatus(left ? 'Preparing... (' + (this.totalDependencies-left) + '/' + this.totalDependencies + ')' : 'All downloads complete.');
+        }
+      };
+      Module.setStatus('Downloading...');
+
+
+      function drow_chart_JUNCTIONS (elem)
+      {
+        get_data_junc(elem);
+
+
+      }
+
+
+      function drow_chart_TANKS (elem)
+      {
+
+
+
+       $.ajax({
+        url: 'http://swms-api.herokuapp.com/networks/Net2.inp/nodes/'+$(elem).attr('title')+'/measures',
+        type: 'GET' ,  
+        dataType: 'json',
+        success: function(data, textStatus, jqXHR)
+        {
+
+          var tank_data= data;
+          epanetjs.setMode(epanetjs.INPUT);
+
+
+          var tank_from_date=$('#tank_from_date').val(),
+          tank_to_date=$('#tank_to_date').val(),
+          tank_from_time=$('#tank_from_time').val(),
+          tank_to_time=$('#tank_to_time').val();
+    //    console.log(tank_from_date+" "+tank_to_date+" "+tank_from_time+" "+tank_to_time);
+     //   console.log(elem);
+
+     $(elem).attr('fill','#9966ff');
+
+     Highcharts.stockChart('tanks', {
+
+
+      title: {
+        text: 'Tanks Chart'
+      },
+
+      subtitle: {
+        text: 'tank ID = '+$(elem).attr('title')
+      },
+
+      xAxis: {
+        gapGridLineWidth: 0
+      },
+
+      rangeSelector: {
+        buttons: [{
+          type: 'hour',
+          count: 1,
+          text: '1h'
+        }, {
+          type: 'day',
+          count: 1,
+          text: '1D'
+        }, {
+          type: 'all',
+          count: 1,
+          text: 'All'
+        }],
+        selected: 1,
+        inputEnabled: false
+      },
+
+      series: [{
+        name: 'AAPL',
+        type: 'area',
+        data:tank_data.PRESSURE ,
+        gapSize: 5,
+        tooltip: {
+          valueDecimals: 2
+        },
+        fillColor: {
+          linearGradient: {
+            x1: 0,
+            y1: 0,
+            x2: 0,
+            y2: 1
+          },
+          stops: [
+          [0, Highcharts.getOptions().colors[0]],
+          [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+          ]
+        },
+        threshold: null
+      }]
+    });
+     
+     
+
+
+
+
+   },
+   error: function(jqXHR, textStatus, errorThrown)
+   {
+
+
+   }
+ });
+
+
+
+
+
+
+
+     }
+
+     function drow_chart_RESERVOIRS (elem)
+     {
+      //  console.log(elem);
+
+
+
+    }
+    function drow_chart_Link (elem)
+    {
+      console.log(elem);
+
+
+
+      $(elem).attr('stroke','#9966ff');
+    }
+  </script>
+
+
+
+  <script src="js/js.js"></script>
+
+  <!-- END TEMPLATE -->
+  <!-- END SCRIPTS -->         
+</body>
+</html>
+
+
+
+<script>
+
+  // $.getJSON('https://www.highcharts.com/samples/data/jsonp.php?filename=new-intraday.json&callback=?', function (data) {
+
+    // create the chart
+   /* Highcharts.stockChart('junc', {
+
+
+      title: {
+        text: 'Junc chart'
+      },
+
+      subtitle: {
+        text: ''
+      },
+
+      xAxis: {
+        gapGridLineWidth: 0
+      },
+
+      rangeSelector: {
+        buttons: [{
+          type: 'hour',
+          count: 1,
+          text: '1h'
+        }, {
+          type: 'day',
+          count: 1,
+          text: '1D'
+        }, {
+          type: 'all',
+          count: 1,
+          text: 'All'
+        }],
+        selected: 1,
+        inputEnabled: false
+      },
+
+      series: [{
+        name: 'AAPL',
+        type: 'area',
+        data: [],
+        gapSize: 5,
+        tooltip: {
+          valueDecimals: 2
+        },
+        fillColor: {
+          linearGradient: {
+            x1: 0,
+            y1: 0,
+            x2: 0,
+            y2: 1
+          },
+          stops: [
+          [0, Highcharts.getOptions().colors[0]],
+          [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+          ]
+        },
+        threshold: null
+      }]
+    });*/
+   /* Highcharts.stockChart('tanks', {
+
+
+      title: {
+        text: 'Tank Chart'
+      },
+
+      subtitle: {
+        text: ''
+      },
+
+      xAxis: {
+        gapGridLineWidth: 0
+      },
+
+      rangeSelector: {
+        buttons: [{
+          type: 'hour',
+          count: 1,
+          text: '1h'
+        }, {
+          type: 'day',
+          count: 1,
+          text: '1D'
+        }, {
+          type: 'all',
+          count: 1,
+          text: 'All'
+        }],
+        selected: 1,
+        inputEnabled: false
+      },
+
+      series: [{
+        name: 'AAPL',
+        type: 'area',
+        data: [],
+        gapSize: 5,
+        tooltip: {
+          valueDecimals: 2
+        },
+        fillColor: {
+          linearGradient: {
+            x1: 0,
+            y1: 0,
+            x2: 0,
+            y2: 1
+          },
+          stops: [
+          [0, Highcharts.getOptions().colors[0]],
+          [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+          ]
+        },
+        threshold: null
+      }]
+    });*/
+//});
+
+var i_data_sm = 0; 
+function start_simulate()
+{
+
+  simulate_data();
+}
+function simulate_data()
+{
+
+  paint_pressure= maxPressure - minPressure; 
+  paint_demand = maxDemand - minDemand; 
+  paint_flow= maxFlow- minFlow;
+
+  var nodes=data_sm[i_data_sm].data.nodes, pipes=data_sm[i_data_sm].data.pipes,time=data_sm[i_data_sm].time,tanks=data_sm[i_data_sm].data.tanks;
+console.log(time);
+
+  jQuery.each( data_sm_leak, function( i, val ) {
+    
+    var html_leak='';
+    if(time==val[0].time)
+    {
+
+      html_leak+='<tr><td>'+val[0].pipeID+'</td>';
+      html_leak+='<td> Between '+val[0].nodeID+' And '+val[0].secondNodeID+'</td>';
+      html_leak+='<td>'+val[0].distance+'</td>';
+      html_leak+='<td>'+val[0].time+'</td>';
+      html_leak+='<td> <button pipe="'+val[0].pipeID+'" firstNode="'+val[0].nodeID+'" secondNode="'+val[0].secondNodeID+'" type="button" class="btn btn-info" onclick="simulate_leak(this)">Info</button></td> </tr>';
+
+    }
+
+    $('#pipes_leak_sm').append(html_leak);
+  });
+
+
+  html="";
+  if(nodes.length>0)
+  {
+
+    for(var j=0; j<nodes.length;j++)
+    {
+
+      paint_pressure_current= nodes[j].pressure - minPressure;
+      paint_demand_current = nodes[j].demand - minDemand;
+      html+='<tr> <td><strong>'+nodes[j].id+'</strong></td>';
+      html+='<td>'+nodes[j].pressure+'</td> ';
+      html+='<td> <div class="progress progress-small progress-striped active"  > ';
+      html+='<div style="width:  '+parseInt(((parseFloat(paint_pressure_current)*100)/paint_pressure))+'%; height: 10px; background-color: '+get_color_Pressure(nodes[j].pressure)+'!important;"></div><div class="progress-bar"  role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="'+paint_pressure+'" style="width: '+parseInt(((parseFloat(paint_pressure_current)*100)/paint_pressure))+'%;">85%</div></div> </td>';
+      html+='<td>'+nodes[j].demand+'</td> ';
+
+      html+='<td> <div class="progress progress-small progress-striped active">';
+      html+='<div style="width:  '+parseInt(((parseFloat(paint_demand_current)*100)/paint_demand))+'%; height: 10px; background-color: '+get_color_Demand(nodes[j].demand)+'!important;"></div><div class="progress-bar " role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="'+paint_demand+'" style="width: '+parseInt(((parseFloat(paint_demand_current)*100)/paint_demand))+'%;">85%</div></div> </td> </tr>';
+
+      if( document.getElementById('circle_'+nodes[j].id))
+      {
+       document.getElementById('circle_'+nodes[j].id).setAttribute('fill',get_color_Pressure(nodes[j].pressure));
+
+     }
+     
+   }
+
+   $('#junc_sm').html('');
+   $('#junc_sm').append(html);
+
+
+ } 
+ html="";
+ if(pipes.length>0)
+ {
+
+  for(var p=0;p<pipes.length;p++)
+  {
+    paint_flow_current= pipes[p].flow- minFlow;
+    html+='<tr> <td>'+pipes[p].id+'</td>';
+    html+='<td>'+pipes[p].flow+'</td>';
+    if(pipes[p].flow>0)
+    {
+
+     html+='<td>From :'+pipes[p].firstNode+' => To : '+pipes[p].secondNode+'</td>';
+   }
+   else
+   {
+     html+='<td>From :'+pipes[p].secondNode+' => To : '+pipes[p].firstNode+'</td>';
+   }
+
+   html+='<td> <div class="progress progress-small progress-striped active">';
+   html+='<div style="width:  '+parseInt(((parseFloat(paint_flow_current)*100)/paint_flow))+'%; height: 10px; background-color: '+get_color_Flow(pipes[p].flow)+'!important;"></div><div class="progress-bar " role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="'+paint_flow+'" style="width: '+parseInt(((parseFloat(paint_flow_current)*100)/paint_flow))+'%;">85%</div></div> </td> </tr>';
+
+   document.getElementById('line_'+pipes[p].id).setAttribute('stroke',get_color_Flow(pipes[p].flow));
+
+ }
+
+ $('#pipes_sm').html('');
+ $('#pipes_sm').append(html);
+
+}
+
+
+if(tanks.length>0)
+{
+  html="";
+  for(var t=0; t<tanks.length;t++)
+  {
+
+    paint_pressure_current= tanks[t].pressure - minPressure;
+    html+='<tr> <td>'+tanks[t].id+'</td>';
+    html+='<td>'+tanks[t].pressure+'</td>';
+    html+='<td> <div class="progress progress-small progress-striped active"  > ';
+    html+='<div style="width:  '+parseInt(((parseFloat(paint_pressure_current)*100)/paint_pressure))+'%; height: 10px; background-color: '+get_color_Pressure(tanks[t].pressure)+'!important;"></div><div class="progress-bar"  role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="'+paint_pressure+'" style="width: '+parseInt(((parseFloat(paint_pressure_current)*100)/paint_pressure))+'%;">85%</div></div> </td>';
+
+  }
+
+
+   $('#tank_sm').html('');
+   $('#tank_sm').append(html);
+
+}
+
+if(i_data_sm<data_sm.length-1)
+{
+
+  ++i_data_sm;
+}
+else
+{
+  i_data_sm=0;
+  return;
+}
+
+
+window.setTimeout(simulate_data, 1000);
+}
+
+
+
+
+function get_color_Pressure(number)
+{
+  var color= ["#d7191c","#fdae61","#ffffbf","#a6d96a","#1a9641"];
+
+  var color_name= ["one","tow","three","four","five"];
+  var step= (maxPressure - minPressure) / 5,i=1;
+  var i=0;
+  for(var ii=minPressure ; ii <= maxPressure;ii+=step)
+  {
+
+    step_=(ii+step).toFixed(3); 
+    if(number>=ii && number<=step_)
+    {
+
+
+      return color[i];
+    }
+    
+    ++i;
+  }
+}
+
+
+
+function get_color_Flow(number)
+{
+  var color= ["#ca0020","#f4a582","#929292","#92c5de","#0571b0"];
+
+  var step= (maxFlow - minFlow) / 5,i=1;
+  var i=0;
+  for(var ii=minFlow ; ii <= maxFlow;ii+=step)
+  {
+
+    step_=(ii+step).toFixed(3); 
+    if(number>=ii && number<=step_)
+    {
+
+
+      return color[i];
+    }
+
+
+    
+    ++i;
+  }
+}
+
+
+
+function get_color_Demand(number)
+{
+  var color= ["#d7191c","#fdae61","#ffffbf","#a6d96a","#1a9641"];
+  var step= (maxDemand - minDemand) / 5,i=1;
+  var i=0;
+  for(var ii=minDemand ; ii <= maxDemand;ii+=step)
+  {
+
+    step_=(ii+step).toFixed(3); 
+    if(number>=ii && number<=step_)
+    {
+
+      return color[i];
+    }
+    
+    ++i;
+  }
+}
+
+
+
+
+function simulate_leak(elem)
+{
+
+ epanetjs.setMode(epanetjs.INPUT)
+
+ document.getElementById('line_'+$(elem).attr('pipe')).setAttribute('stroke','#d7191c');
+
+
+ document.getElementById('circle_'+$(elem).attr('firstNode')).setAttribute('fill','#d7191c');
+
+ document.getElementById('circle_'+$(elem).attr('secondNode')).setAttribute('fill','#d7191c');
+}
+</script>
+
+
+
+
+/*
+var myLatlng = {
+  lat:  33.5121108,
+  lng: 36.2762077
+};
+
+var map = new google.maps.Map(document.getElementById('map'), {
+  zoom: 15,
+  center: myLatlng,
+  disableDefaultUI: true,
+  scrollwheel: false,
+  styles: [
+    {
+        "featureType": "all",
+        "elementType": "labels.text.fill",
+        "stylers": [
+            {
+                "color": "#ffffff"
+            }
+        ]
+    },
+    {
+        "featureType": "all",
+        "elementType": "labels.text.stroke",
+        "stylers": [
+            {
+                "color": "#000000"
+            },
+            {
+                "lightness": 13
+            }
+        ]
+    },
+    {
+        "featureType": "administrative",
+        "elementType": "geometry.fill",
+        "stylers": [
+            {
+                "color": "#000000"
+            }
+        ]
+    },
+    {
+        "featureType": "administrative",
+        "elementType": "geometry.stroke",
+        "stylers": [
+            {
+                "color": "#144b53"
+            },
+            {
+                "lightness": 14
+            },
+            {
+                "weight": 1.4
+            }
+        ]
+    },
+    {
+        "featureType": "landscape",
+        "elementType": "all",
+        "stylers": [
+            {
+                "color": "#08304b"
+            }
+        ]
+    },
+    {
+        "featureType": "poi",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "color": "#0c4152"
+            },
+            {
+                "lightness": 5
+            }
+        ]
+    },
+    {
+        "featureType": "road.highway",
+        "elementType": "geometry.fill",
+        "stylers": [
+            {
+                "color": "#000000"
+            }
+        ]
+    },
+    {
+        "featureType": "road.highway",
+        "elementType": "geometry.stroke",
+        "stylers": [
+            {
+                "color": "#0b434f"
+            },
+            {
+                "lightness": 25
+            }
+        ]
+    },
+    {
+        "featureType": "road.arterial",
+        "elementType": "geometry.fill",
+        "stylers": [
+            {
+                "color": "#000000"
+            }
+        ]
+    },
+    {
+        "featureType": "road.arterial",
+        "elementType": "geometry.stroke",
+        "stylers": [
+            {
+                "color": "#0b3d51"
+            },
+            {
+                "lightness": 16
+            }
+        ]
+    },
+    {
+        "featureType": "road.local",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "color": "#000000"
+            }
+        ]
+    },
+    {
+        "featureType": "transit",
+        "elementType": "all",
+        "stylers": [
+            {
+                "color": "#146474"
+            }
+        ]
+    },
+    {
+        "featureType": "water",
+        "elementType": "all",
+        "stylers": [
+            {
+                "color": "#021019"
+            }
+        ]
+    }
+    ]*/
+/*[
+    {
+        "featureType": "all",
+        "elementType": "labels.text.fill",
+        "stylers": [
+            {
+                "color": "#ffffff"
+            }
+        ]
+    },
+    {
+        "featureType": "all",
+        "elementType": "labels.text.stroke",
+        "stylers": [
+            {
+                "color": "#000000"
+            },
+            {
+                "lightness": 13
+            }
+        ]
+    },
+    {
+        "featureType": "administrative",
+        "elementType": "geometry.fill",
+        "stylers": [
+            {
+                "color": "#000000"
+            }
+        ]
+    },
+    {
+        "featureType": "administrative",
+        "elementType": "geometry.stroke",
+        "stylers": [
+            {
+                "color": "#144b53"
+            },
+            {
+                "lightness": 14
+            },
+            {
+                "weight": 1.4
+            }
+        ]
+    },
+    {
+        "featureType": "administrative",
+        "elementType": "labels.text",
+        "stylers": [
+            {
+                "visibility": "on"
+            }
+        ]
+    },
+    {
+        "featureType": "landscape",
+        "elementType": "all",
+        "stylers": [
+            {
+                "color": "#08304b"
+            }
+        ]
+    },
+    {
+        "featureType": "poi",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "color": "#0c4152"
+            },
+            {
+                "lightness": 5
+            }
+        ]
+    },
+    {
+        "featureType": "poi.attraction",
+        "elementType": "labels.icon",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "poi.business",
+        "elementType": "labels.icon",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "poi.medical",
+        "elementType": "labels.text",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "poi.medical",
+        "elementType": "labels.icon",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "poi.park",
+        "elementType": "labels",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "poi.place_of_worship",
+        "elementType": "labels.icon",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "poi.school",
+        "elementType": "labels",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "poi.school",
+        "elementType": "labels.icon",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "poi.sports_complex",
+        "elementType": "labels.icon",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "road.highway",
+        "elementType": "geometry.fill",
+        "stylers": [
+            {
+                "color": "#000000"
+            }
+        ]
+    },
+    {
+        "featureType": "road.highway",
+        "elementType": "geometry.stroke",
+        "stylers": [
+            {
+                "color": "#0b434f"
+            },
+            {
+                "lightness": 25
+            }
+        ]
+    },
+    {
+        "featureType": "road.arterial",
+        "elementType": "geometry.fill",
+        "stylers": [
+            {
+                "color": "#000000"
+            }
+        ]
+    },
+    {
+        "featureType": "road.arterial",
+        "elementType": "geometry.stroke",
+        "stylers": [
+            {
+                "color": "#0b3d51"
+            },
+            {
+                "lightness": 16
+            }
+        ]
+    },
+    {
+        "featureType": "road.local",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "color": "#000000"
+            }
+        ]
+    },
+    {
+        "featureType": "transit",
+        "elementType": "all",
+        "stylers": [
+            {
+                "color": "#146474"
+            }
+        ]
+    },
+    {
+        "featureType": "water",
+        "elementType": "all",
+        "stylers": [
+            {
+                "color": "#021019"
+            }
+        ]
+    },
+    {
+        "featureType": "water",
+        "elementType": "labels.icon",
+        "stylers": [
+            {
+                "visibility": "on"
+            },
+            {
+                "gamma": "0.00"
+            }
+        ]
+    }
+]
+
+[
+{
+  "featureType": "all",
+  "elementType": "geometry",
+  "stylers": [
+  {
+    "visibility": "off"
+  }
+  ]
+},
+{
+  "featureType": "all",
+  "elementType": "labels.text.fill",
+  "stylers": [
+  {
+    "color": "#ffffff"
+  }
+  ]
+},
+{
+  "featureType": "all",
+  "elementType": "labels.text.stroke",
+  "stylers": [
+  {
+    "color": "#000000"
+  },
+  {
+    "lightness": 13
+  }
+  ]
+},
+{
+  "featureType": "administrative",
+  "elementType": "geometry.fill",
+  "stylers": [
+  {
+    "color": "#000000"
+  }
+  ]
+},
+{
+  "featureType": "administrative",
+  "elementType": "geometry.stroke",
+  "stylers": [
+  {
+    "color": "#144b53"
+  },
+  {
+    "lightness": 14
+  },
+  {
+    "weight": 1.4
+  }
+  ]
+},
+{
+  "featureType": "administrative.country",
+  "elementType": "geometry",
+  "stylers": [
+  {
+    "visibility": "off"
+  }
+  ]
+},
+{
+  "featureType": "administrative.province",
+  "elementType": "geometry",
+  "stylers": [
+  {
+    "visibility": "off"
+  }
+  ]
+},
+{
+  "featureType": "administrative.locality",
+  "elementType": "geometry",
+  "stylers": [
+  {
+    "visibility": "off"
+  }
+  ]
+},
+{
+  "featureType": "administrative.neighborhood",
+  "elementType": "geometry",
+  "stylers": [
+  {
+    "visibility": "off"
+  }
+  ]
+},
+{
+  "featureType": "administrative.neighborhood",
+  "elementType": "labels.text",
+  "stylers": [
+  {
+    "visibility": "off"
+  }
+  ]
+},
+{
+  "featureType": "administrative.land_parcel",
+  "elementType": "geometry",
+  "stylers": [
+  {
+    "visibility": "off"
+  }
+  ]
+},
+{
+  "featureType": "landscape",
+  "elementType": "all",
+  "stylers": [
+  {
+    "color": "#08304b"
+  }
+  ]
+},
+{
+  "featureType": "landscape",
+  "elementType": "geometry",
+  "stylers": [
+  {
+    "visibility": "on"
+  }
+  ]
+},
+{
+  "featureType": "poi",
+  "elementType": "geometry",
+  "stylers": [
+  {
+    "color": "#0c4152"
+  },
+  {
+    "lightness": 5
+  },
+  {
+    "visibility": "off"
+  }
+  ]
+},
+{
+  "featureType": "poi.attraction",
+  "elementType": "geometry",
+  "stylers": [
+  {
+    "visibility": "off"
+  }
+  ]
+},
+{
+  "featureType": "poi.attraction",
+  "elementType": "labels.icon",
+  "stylers": [
+  {
+    "visibility": "off"
+  }
+  ]
+},
+{
+  "featureType": "poi.business",
+  "elementType": "geometry",
+  "stylers": [
+  {
+    "visibility": "off"
+  }
+  ]
+},
+{
+  "featureType": "poi.business",
+  "elementType": "labels.icon",
+  "stylers": [
+  {
+    "visibility": "off"
+  }
+  ]
+},
+{
+  "featureType": "poi.government",
+  "elementType": "geometry",
+  "stylers": [
+  {
+    "visibility": "off"
+  }
+  ]
+},
+{
+  "featureType": "poi.medical",
+  "elementType": "geometry",
+  "stylers": [
+  {
+    "visibility": "off"
+  }
+  ]
+},
+{
+  "featureType": "poi.medical",
+  "elementType": "labels.text",
+  "stylers": [
+  {
+    "visibility": "off"
+  }
+  ]
+},
+{
+  "featureType": "poi.medical",
+  "elementType": "labels.icon",
+  "stylers": [
+  {
+    "visibility": "off"
+  }
+  ]
+},
+{
+  "featureType": "poi.park",
+  "elementType": "geometry",
+  "stylers": [
+  {
+    "visibility": "off"
+  }
+  ]
+},
+{
+  "featureType": "poi.park",
+  "elementType": "labels",
+  "stylers": [
+  {
+    "visibility": "off"
+  }
+  ]
+},
+{
+  "featureType": "poi.place_of_worship",
+  "elementType": "geometry",
+  "stylers": [
+  {
+    "visibility": "off"
+  }
+  ]
+},
+{
+  "featureType": "poi.place_of_worship",
+  "elementType": "labels.icon",
+  "stylers": [
+  {
+    "visibility": "off"
+  }
+  ]
+},
+{
+  "featureType": "poi.school",
+  "elementType": "geometry",
+  "stylers": [
+  {
+    "visibility": "off"
+  }
+  ]
+},
+{
+  "featureType": "poi.school",
+  "elementType": "labels",
+  "stylers": [
+  {
+    "visibility": "off"
+  }
+  ]
+},
+{
+  "featureType": "poi.school",
+  "elementType": "labels.icon",
+  "stylers": [
+  {
+    "visibility": "off"
+  }
+  ]
+},
+{
+  "featureType": "poi.sports_complex",
+  "elementType": "geometry",
+  "stylers": [
+  {
+    "visibility": "off"
+  }
+  ]
+},
+{
+  "featureType": "poi.sports_complex",
+  "elementType": "labels.icon",
+  "stylers": [
+  {
+    "visibility": "off"
+  }
+  ]
+},
+{
+  "featureType": "road",
+  "elementType": "labels",
+  "stylers": [
+  {
+    "visibility": "off"
+  }
+  ]
+},
+{
+  "featureType": "road.highway",
+  "elementType": "geometry.fill",
+  "stylers": [
+  {
+    "color": "#000000"
+  }
+  ]
+},
+{
+  "featureType": "road.highway",
+  "elementType": "geometry.stroke",
+  "stylers": [
+  {
+    "color": "#0b434f"
+  },
+  {
+    "lightness": 25
+  }
+  ]
+},
+{
+  "featureType": "road.arterial",
+  "elementType": "geometry",
+  "stylers": [
+  {
+    "visibility": "on"
+  }
+  ]
+},
+{
+  "featureType": "road.arterial",
+  "elementType": "geometry.fill",
+  "stylers": [
+  {
+    "color": "#000000"
+  }
+  ]
+},
+{
+  "featureType": "road.arterial",
+  "elementType": "geometry.stroke",
+  "stylers": [
+  {
+    "color": "#0b3d51"
+  },
+  {
+    "lightness": 16
+  }
+  ]
+},
+{
+  "featureType": "road.local",
+  "elementType": "geometry",
+  "stylers": [
+  {
+    "color": "#000000"
+  },
+  {
+    "visibility": "off"
+  }
+  ]
+},
+{
+  "featureType": "transit",
+  "elementType": "all",
+  "stylers": [
+  {
+    "color": "#146474"
+  }
+  ]
+},
+{
+  "featureType": "water",
+  "elementType": "all",
+  "stylers": [
+  {
+    "color": "#021019"
+  },
+  {
+    "visibility": "on"
+  }
+  ]
+},
+{
+  "featureType": "water",
+  "elementType": "labels.icon",
+  "stylers": [
+  {
+    "visibility": "on"
+  },
+  {
+    "gamma": "0.00"
+  }
+  ]
+}
+]
+});*/
